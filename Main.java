@@ -215,7 +215,7 @@ class Anggota {
 }
 
 // Library class
-class Perpastakaan {
+class Perpustakaan {
     private Buku[] daftarBuku;
     private Anggota[] daftarAnggota;
     private int jumlahBuku;
@@ -223,7 +223,7 @@ class Perpastakaan {
     private static final int MAX_BUKU = 100;
     private static final int MAX_ANGGOTA = 50;
 
-    public Perpastakaan() {
+    public Perpustakaan() {
         this.daftarBuku = new Buku[MAX_BUKU];
         this.daftarAnggota = new Anggota[MAX_ANGGOTA];
         this.jumlahBuku = 0;
@@ -310,7 +310,7 @@ class Perpastakaan {
 
 // Main class
 public class Main {
-    private static Perpastakaan perpustakaan = new Perpastakaan();
+    private static Perpustakaan perpustakaan = new Perpustakaan();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
