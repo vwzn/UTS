@@ -66,11 +66,11 @@ class Buku {
 }
 
 // Fiction Book class
-class BukuFlick extends Buku {
+class BukuFiksi extends Buku {
     private String genre;
     private int jumlahHalaman;
 
-    public BukuFlick(String judul, String penulis, int tahunTerbit, String kode, String genre, int jumlahHalaman) {
+    public BukuFiksi(String judul, String penulis, int tahunTerbit, String kode, String genre, int jumlahHalaman) {
         super(judul, penulis, tahunTerbit, kode);
         this.genre = genre;
         this.jumlahHalaman = jumlahHalaman;
@@ -101,11 +101,11 @@ class BukuFlick extends Buku {
 }
 
 // Non-Fiction Book class
-class BukuWenFlick extends Buku {
+class BukuNonFiksi extends Buku {
     private String subjek;
     private String isbn;
 
-    public BukuWenFlick(String judul, String penulis, int tahunTerbit, String kode, String subjek, String isbn) {
+    public BukuNonFiksi(String judul, String penulis, int tahunTerbit, String kode, String subjek, String isbn) {
         super(judul, penulis, tahunTerbit, kode);
         this.subjek = subjek;
         this.isbn = isbn;
@@ -320,8 +320,8 @@ public class Main {
 
     private static void inisialisasiData() {
         // Add some initial data
-        perpustakaan.tambahBuku(new BukuFlick("Harry Potter", "J.K. Rowling", 1997, "F001", "Fantasi", 400));
-        perpustakaan.tambahBuku(new BukuWenFlick("Sapiens", "Yuval Noah Harari", 2011, "NF001", "Sejarah", "978-0062316097"));
+        perpustakaan.tambahBuku(new BukuFiksi("Harry Potter", "J.K. Rowling", 1997, "F001", "Fantasi", 400));
+        perpustakaan.tambahBuku(new BukuNonFiksi("Sapiens", "Yuval Noah Harari", 2011, "NF001", "Sejarah", "978-0062316097"));
         perpustakaan.tambahAnggota(new Anggota("A001", "John Doe", "Jl. Contoh No. 123", "Premium"));
     }
 
@@ -391,7 +391,7 @@ public class Main {
             int halaman = scanner.nextInt();
             scanner.nextLine();
             
-            BukuFlick buku = new BukuFlick(judul, penulis, tahun, kode, genre, halaman);
+            BukuFiksi buku = new BukuFiksi(judul, penulis, tahun, kode, genre, halaman);
             if (perpustakaan.tambahBuku(buku)) {
                 System.out.println("Buku fiksi berhasil ditambahkan!");
             } else {
@@ -403,7 +403,7 @@ public class Main {
             System.out.print("ISBN: ");
             String isbn = scanner.nextLine();
             
-            BukuWenFlick buku = new BukuWenFlick(judul, penulis, tahun, kode, subjek, isbn);
+            BukuNonFiksi buku = new BukuNonFiksi(judul, penulis, tahun, kode, subjek, isbn);
             if (perpustakaan.tambahBuku(buku)) {
                 System.out.println("Buku non-fiksi berhasil ditambahkan!");
             } else {
