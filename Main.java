@@ -136,7 +136,7 @@ class BukuWenFlick extends Buku {
 }
 
 // Member class
-class Anggets {
+class Anggota {
     private String id;
     private String nama;
     private String alamat;
@@ -145,7 +145,7 @@ class Anggets {
     private int jumlahBukuDipinjam;
     private static final int MAX_PINJAM = 5;
 
-    public Anggets(String id, String nama, String alamat, String membership) {
+    public Anggota(String id, String nama, String alamat, String membership) {
         this.id = id;
         this.nama = nama;
         this.alamat = alamat;
@@ -217,7 +217,7 @@ class Anggets {
 // Library class
 class Perpastakaan {
     private Buku[] daftarBuku;
-    private Anggets[] daftarAnggota;
+    private Anggota[] daftarAnggota;
     private int jumlahBuku;
     private int jumlahAnggota;
     private static final int MAX_BUKU = 100;
@@ -225,7 +225,7 @@ class Perpastakaan {
 
     public Perpastakaan() {
         this.daftarBuku = new Buku[MAX_BUKU];
-        this.daftarAnggota = new Anggets[MAX_ANGGOTA];
+        this.daftarAnggota = new Anggota[MAX_ANGGOTA];
         this.jumlahBuku = 0;
         this.jumlahAnggota = 0;
     }
@@ -238,7 +238,7 @@ class Perpastakaan {
         return false;
     }
 
-    public boolean tambahAnggota(Anggets anggota) {
+    public boolean tambahAnggota(Anggota anggota) {
         if (jumlahAnggota < MAX_ANGGOTA) {
             daftarAnggota[jumlahAnggota++] = anggota;
             return true;
@@ -264,7 +264,7 @@ class Perpastakaan {
         return null;
     }
 
-    public Anggets cariAnggotaById(String id) {
+    public Anggota cariAnggotaById(String id) {
         for (int i = 0; i < jumlahAnggota; i++) {
             if (daftarAnggota[i].getId().equalsIgnoreCase(id)) {
                 return daftarAnggota[i];
@@ -274,7 +274,7 @@ class Perpastakaan {
     }
 
     public boolean pinjamBuku(String idAnggota, String kodeBuku) {
-        Anggets anggota = cariAnggotaById(idAnggota);
+        Anggota anggota = cariAnggotaById(idAnggota);
         Buku buku = cariBukuByKode(kodeBuku);
         
         if (anggota != null && buku != null) {
@@ -284,7 +284,7 @@ class Perpastakaan {
     }
 
     public boolean kembalikanBuku(String idAnggota, String kodeBuku) {
-        Anggets anggota = cariAnggotaById(idAnggota);
+        Anggota anggota = cariAnggotaById(idAnggota);
         Buku buku = cariBukuByKode(kodeBuku);
         
         if (anggota != null && buku != null) {
@@ -322,7 +322,7 @@ public class Main {
         // Add some initial data
         perpustakaan.tambahBuku(new BukuFlick("Harry Potter", "J.K. Rowling", 1997, "F001", "Fantasi", 400));
         perpustakaan.tambahBuku(new BukuWenFlick("Sapiens", "Yuval Noah Harari", 2011, "NF001", "Sejarah", "978-0062316097"));
-        perpustakaan.tambahAnggota(new Anggets("A001", "John Doe", "Jl. Contoh No. 123", "Premium"));
+        perpustakaan.tambahAnggota(new Anggota("A001", "John Doe", "Jl. Contoh No. 123", "Premium"));
     }
 
     private static void menuUtama() {
@@ -425,7 +425,7 @@ public class Main {
         System.out.print("Membership: ");
         String membership = scanner.nextLine();
         
-        Anggets anggota = new Anggets(id, nama, alamat, membership);
+        Anggota anggota = new Anggota(id, nama, alamat, membership);
         if (perpustakaan.tambahAnggota(anggota)) {
             System.out.println("Anggota berhasil ditambahkan!");
         } else {
