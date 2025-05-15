@@ -1,0 +1,93 @@
+public class Perpustakaan {
+
+    private Buku[] daftarBuku;
+    private Anggota[] daftarAnggota;
+    private int jumlahBuku;
+    private int jumlahAnggota;
+    private static final int MAX_BUKU = 100;
+    private static final int MAX_ANGGOTA = 50;
+
+    public Perpustakaan() {
+        this.daftarBuku = new Buku[MAX_BUKU];
+        this.daftarAnggota = new Anggota[MAX_ANGGOTA];
+        this.jumlahBuku = 0;
+        this.jumlahAnggota = 0;
+    }
+
+    public boolean tambahBuku(Buku buku) {
+        if (jumlahBuku < MAX_BUKU) {
+            daftarBuku[jumlahBuku++] = buku;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean tambahAnggota(Anggota anggota) {
+        if (jumlahAnggota < MAX_ANGGOTA) {
+            daftarAnggota[jumlahAnggota++] = anggota;
+            return true;
+        }
+        return false;
+    }
+
+    public Buku cariBukuByJudul(String judul) {
+        for (int i = 0; i < jumlahBuku; i++) {
+            if (daftarBuku[i].getJudul().equalsIgnoreCase(judul)) {
+                return daftarBuku[i];
+            }
+        }
+        return null;
+    }
+
+    public Buku cariBukuByKode(String kode) {
+        for (int i = 0; i < jumlahBuku; i++) {
+            if (daftarBuku[i].getKode().equalsIgnoreCase(kode)) {
+                return daftarBuku[i];
+            }
+        }
+        return null;
+    }
+
+    public Anggota cariAnggotaById(String id) {
+        for (int i = 0; i < jumlahAnggota; i++) {
+            if (daftarAnggota[i].getId().equalsIgnoreCase(id)) {
+                return daftarAnggota[i];
+            }
+        }
+        return null;
+    }
+
+    public boolean pinjamBuku(String idAnggota, String kodeBuku) {
+        Anggota anggota = cariAnggotaById(idAnggota);
+        Buku buku = cariBukuByKode(kodeBuku);
+
+        if (anggota != null && buku != null) {
+            return anggota.pinjamBuku(buku);
+        }
+        return false;
+    }
+
+    public boolean kembalikanBuku(String idAnggota, String kodeBuku) {
+        Anggota anggota = cariAnggotaById(idAnggota);
+        Buku buku = cariBukuByKode(kodeBuku);
+
+        if (anggota != null && buku != null) {
+            return anggota.kembalikanBuku(buku);
+        }
+        return false;
+    }
+
+    public void tampilkanSemuaBuku() {
+        for (int i = 0; i < jumlahBuku; i++) {
+            daftarBuku[i].tampilkanInfo();
+            System.out.println("-------------------");
+        }
+    }
+
+    public void tampilkanSemuaAnggota() {
+        for (int i = 0; i < jumlahAnggota; i++) {
+            daftarAnggota[i].tampilkanInfo();
+            System.out.println("-------------------");
+        }
+    }
+}
