@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -13,8 +14,8 @@ public class Main {
         // Add some initial data
         perpustakaan.tambahBuku(new BukuFiksi("Harry Potter", "J.K. Rowling", 1997, "F001", "Fantasi", 400));
         perpustakaan.tambahBuku(
-                new BukuNonFiksi("Sapiens", "Yuval Noah Harari", 2011, "NF001", "Sejarah", "978-0062316097"));
-        perpustakaan.tambahAnggota(new Anggota("A001", "John Doe", "Jl. Contoh No. 123", "Premium"));
+                new BukuNonFiksi("Sapiens", "Noah Harari", 2011, "NF001", "Sejarah", "978-0062316097"));
+        perpustakaan.tambahAnggota(new Anggota("A001", "Heryanto", "Jl. Contoh No. 123", "Premium"));
     }
 
     private static void menuUtama() {
@@ -27,6 +28,7 @@ public class Main {
             System.out.println("5. Pinjam Buku");
             System.out.println("6. Kembalikan Buku");
             System.out.println("7. Daftar Anggota");
+            System.out.println("8. Hapus Anggota");
             System.out.println("0. Keluar");
             System.out.print("Pilih menu: ");
 
@@ -55,6 +57,16 @@ public class Main {
                 case 7:
                     perpustakaan.tampilkanSemuaAnggota();
                     break;
+                case 8:
+                    System.out.println("Masukkan ID Anggota yang ingin dihapus:");
+                    String id = scanner.nextLine();
+                    if (perpustakaan.hapusAnggotaById(id)) {
+                        System.out.println("Anggota berhasil dihapus!");
+                    } else {
+                        System.out.println("Anggota tidak ditemukan.");
+                    }
+                    break;
+
                 case 0:
                     System.out.println("Terima kasih!");
                     return;
@@ -66,26 +78,57 @@ public class Main {
 
     private static void menuTambahBuku() {
         System.out.println("\n=== Tambah Buku ===");
-        System.out.print("Jenis buku (1. Fiksi / 2. Non-Fiksi): ");
-        int jenis = scanner.nextInt();
-        scanner.nextLine();
+
+        int jenis = 0;
+        while (true) {
+            System.out.print("Jenis buku (1. Fiksi / 2. Non-Fiksi): ");
+            if (scanner.hasNextInt()) {
+                jenis = scanner.nextInt();
+                scanner.nextLine(); // Buang newline
+                break;
+            } else {
+                System.out.println("Input harus berupa angka 1 atau 2!");
+                scanner.nextLine(); // Buang input salah
+            }
+        }
 
         System.out.print("Judul: ");
         String judul = scanner.nextLine();
         System.out.print("Penulis: ");
         String penulis = scanner.nextLine();
-        System.out.print("Tahun Terbit: ");
-        int tahun = scanner.nextInt();
-        scanner.nextLine();
+
+        int tahun = 0;
+        while (true) {
+            System.out.print("Tahun Terbit: ");
+            if (scanner.hasNextInt()) {
+                tahun = scanner.nextInt();
+                scanner.nextLine(); // Buang newline
+                break;
+            } else {
+                System.out.println("Input harus berupa angka (tahun)!");
+                scanner.nextLine();
+            }
+        }
+
         System.out.print("Kode: ");
         String kode = scanner.nextLine();
 
         if (jenis == 1) {
             System.out.print("Genre: ");
             String genre = scanner.nextLine();
-            System.out.print("Jumlah Halaman: ");
-            int halaman = scanner.nextInt();
-            scanner.nextLine();
+
+            int halaman = 0;
+            while (true) {
+                System.out.print("Jumlah Halaman: ");
+                if (scanner.hasNextInt()) {
+                    halaman = scanner.nextInt();
+                    scanner.nextLine();
+                    break;
+                } else {
+                    System.out.println("Input harus berupa angka!");
+                    scanner.nextLine();
+                }
+            }
 
             BukuFiksi buku = new BukuFiksi(judul, penulis, tahun, kode, genre, halaman);
             if (perpustakaan.tambahBuku(buku)) {
@@ -114,6 +157,11 @@ public class Main {
         System.out.println("\n=== Tambah Anggota ===");
         System.out.print("ID Anggota: ");
         String id = scanner.nextLine();
+
+        if (perpustakaan.cariAnggotaById(id) != null) {
+            System.out.println("Id sudah terdaftar, gunakan ID lain!");
+            return;
+        }
         System.out.print("Nama: ");
         String nama = scanner.nextLine();
         System.out.print("Alamat: ");
@@ -178,12 +226,15 @@ public class Main {
         String idAnggota = scanner.nextLine();
         System.out.print("Kode Buku: ");
         String kodeBuku = scanner.nextLine();
+        System.out.print("Tanggal Kembali (yyyy-mm-dd): ");
+        String tanggalStr = scanner.nextLine();
+        LocalDate tanggalKembali = LocalDate.parse(tanggalStr);
 
-        if (perpustakaan.kembalikanBuku(idAnggota, kodeBuku)) {
+        if (perpustakaan.kembalikanBuku(idAnggota, kodeBuku, tanggalKembali)) {
             System.out.println("Buku berhasil dikembalikan!");
         } else {
-            System.out.println(
-                    "Gagal mengembalikan buku. Anggota atau buku tidak ditemukan, atau buku tidak dipinjam oleh anggota tersebut.");
+            System.out.println("Gagal mengembalikan buku.");
         }
     }
+
 }

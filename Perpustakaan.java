@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class Perpustakaan {
 
     private Buku[] daftarBuku;
@@ -67,12 +69,12 @@ public class Perpustakaan {
         return false;
     }
 
-    public boolean kembalikanBuku(String idAnggota, String kodeBuku) {
+    public boolean kembalikanBuku(String idAnggota, String kodeBuku, LocalDate tanggalKembali) {
         Anggota anggota = cariAnggotaById(idAnggota);
         Buku buku = cariBukuByKode(kodeBuku);
 
         if (anggota != null && buku != null) {
-            return anggota.kembalikanBuku(buku);
+            return anggota.kembalikanBuku(buku, tanggalKembali);
         }
         return false;
     }
@@ -90,4 +92,19 @@ public class Perpustakaan {
             System.out.println("-------------------");
         }
     }
+
+    public boolean hapusAnggotaById(String id) {
+        for (int i = 0; i < jumlahAnggota; i++) {
+            if (daftarAnggota[i].getId().equalsIgnoreCase(id)) {
+                // Geser semua elemen setelahnya ke kiri
+                for (int j = i; j < jumlahAnggota - 1; j++) {
+                    daftarAnggota[j] = daftarAnggota[j + 1];
+                }
+                daftarAnggota[--jumlahAnggota] = null; // Kurangi jumlah dan kosongkan slot terakhir
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
