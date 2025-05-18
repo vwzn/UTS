@@ -29,6 +29,7 @@ public class Main {
             System.out.println("6. Kembalikan Buku");
             System.out.println("7. Daftar Anggota");
             System.out.println("8. Hapus Anggota");
+            System.out.println("9. Tabel Seluruh Informasi");
             System.out.println("0. Keluar");
             System.out.print("Pilih menu: ");
 
@@ -66,7 +67,9 @@ public class Main {
                         System.out.println("Anggota tidak ditemukan.");
                     }
                     break;
-
+                case 9:
+                    tampilkanSeluruhInformasi();
+                    break;
                 case 0:
                     System.out.println("Terima kasih!");
                     return;
@@ -213,8 +216,36 @@ public class Main {
         System.out.print("Kode Buku: ");
         String kodeBuku = scanner.nextLine();
 
-        if (perpustakaan.pinjamBuku(idAnggota, kodeBuku)) {
+        // Add option for borrowing date
+        System.out.println("Pilih tanggal pinjam:");
+        System.out.println("1. Pinjam hari ini");
+        System.out.println("2. Booking (pilih tanggal lain)");
+        System.out.print("Pilihan (1/2): ");
+        int dateChoice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+
+        LocalDate tanggalPinjam;
+
+        if (dateChoice == 1) {
+            tanggalPinjam = LocalDate.now();
+        } else if (dateChoice == 2) {
+            System.out.print("Masukkan tanggal pinjam (yyyy-mm-dd): ");
+            String tanggalStr = scanner.nextLine();
+            tanggalPinjam = LocalDate.parse(tanggalStr);
+
+            // Validate booking date is not in the past
+            if (tanggalPinjam.isBefore(LocalDate.now())) {
+                System.out.println("Error: Tidak bisa meminjam dengan tanggal yang sudah terlewat!");
+                return;
+            }
+        } else {
+            System.out.println("Pilihan tidak valid!");
+            return;
+        }
+
+        if (perpustakaan.pinjamBuku(idAnggota, kodeBuku, tanggalPinjam)) {
             System.out.println("Buku berhasil dipinjam!");
+            System.out.println("Tanggal pinjam: " + tanggalPinjam);
         } else {
             System.out.println("Gagal meminjam buku. Anggota atau buku tidak ditemukan, atau buku tidak tersedia.");
         }
@@ -237,4 +268,92 @@ public class Main {
         }
     }
 
+    private static void tampilkanSeluruhInformasi() {
+        System.out.println("\n╔══════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                          TABEL SELURUH INFORMASI PERPUSTAKAAN                 ║");
+        System.out.println("╠═══════════════════════════════════════════════════════════════════════════════╣");
+        
+        // Display all books
+        System.out.println("║                                                                               ║");
+        System.out.println("║   DAFTAR BUKU (" + perpustakaan.getJumlahBuku() + " buku)                                                        ║");
+        System.out.println("║                                                                               ║");
+        System.out.println("╠══════════════╦══════════════════════════╦════════════╦════════╦═══════════════╣");
+        System.out.println("║ Kode         ║ Judul                    ║ Penulis    ║ Tahun  ║ Status        ║");
+        System.out.println("╠══════════════╬══════════════════════════╬════════════╬════════╬═══════════════╣");
+        
+        for (int i = 0; i < perpustakaan.getJumlahBuku(); i++) {
+            Buku buku = perpustakaan.getDaftarBuku()[i];
+            System.out.printf("║ %-12s ║ %-24s ║ %-10s ║ %-6d ║ %-13s ║\n",
+                buku.getKode(),
+                buku.getJudul().length() > 24 ? buku.getJudul().substring(0, 21) + "..." : buku.getJudul(),
+                buku.getPenulis().length() > 10 ? buku.getPenulis().substring(0, 7) + "..." : buku.getPenulis(),
+                buku.getTahunTerbit(),
+                buku.isTersedia() ? "Tersedia" : "Dipinjam");
+        }
+        System.out.println("╚══════════════╩══════════════════════════╩════════════╩════════╩═══════════════╝");
+        
+        // Display all members
+        System.out.println("\n╔═══════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║   DAFTAR ANGGOTA (" + perpustakaan.getJumlahAnggota() + " anggota)                                                    ║");
+        System.out.println("╠══════════════╦══════════════════════════╦══════════════════════╦═══════════════╣");
+        System.out.println("║ ID Anggota   ║ Nama                     ║ Alamat               ║ Membership    ║");
+        System.out.println("╠══════════════╬══════════════════════════╬══════════════════════╬═══════════════╣");
+        
+        for (int i = 0; i < perpustakaan.getJumlahAnggota(); i++) {
+            Anggota anggota = perpustakaan.getDaftarAnggota()[i];
+            System.out.printf("║ %-12s ║ %-24s ║ %-20s ║ %-13s ║\n",
+                anggota.getId(),
+                anggota.getNama(),
+                anggota.getAlamat().length() > 20 ? anggota.getAlamat().substring(0, 17) + "..." : anggota.getAlamat(),
+                anggota.getMembership());
+        }
+        System.out.println("╚══════════════╩══════════════════════════╩══════════════════════╩═══════════════╝");
+        
+        // Display borrowing information
+        System.out.println("\n╔═══════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║   DAFTAR PEMINJAMAN AKTIF                                                      ║");
+        System.out.println("╠══════════════╦══════════════════════════╦══════════════════════╦═══════════════╣");
+        System.out.println("║ ID Anggota   ║ Nama Anggota             ║ Buku Dipinjam        ║ Tanggal Pinjam║");
+        System.out.println("╠══════════════╬══════════════════════════╬══════════════════════╬═══════════════╣");
+        
+        boolean adaPeminjaman = false;
+        for (int i = 0; i < perpustakaan.getJumlahAnggota(); i++) {
+            Anggota anggota = perpustakaan.getDaftarAnggota()[i];
+            for (int j = 0; j < anggota.getJumlahBukuDipinjam(); j++) {
+                Buku buku = anggota.getBukuArrayDipinjam()[j];
+                LocalDate tanggalPinjam = anggota.getDataPinjam().get(buku);
+                System.out.printf("║ %-12s ║ %-24s ║ %-20s ║ %-13s ║\n",
+                    anggota.getId(),
+                    anggota.getNama(),
+                    buku.getJudul().length() > 20 ? buku.getJudul().substring(0, 17) + "..." : buku.getJudul(),
+                    tanggalPinjam.toString());
+                adaPeminjaman = true;
+            }
+        }
+        
+        if (!adaPeminjaman) {
+            System.out.println("║                          TIDAK ADA PEMINJAMAN AKTIF                            ║");
+        }
+        System.out.println("╚══════════════╩══════════════════════════╩══════════════════════╩═══════════════╝");
+        
+        // Display statistics
+        System.out.println("\n╔════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║  📊 STATISTIK PERPUSTAKAAN                                                      ║");
+        System.out.println("╠════════════════════════════════════════════════════════════════════════════════╣");
+        System.out.printf("║ Total Buku: %-3d   Total Anggota: %-3d   Buku Dipinjam: %-3d   Kapasitas: %-3d/%d ║\n",
+            perpustakaan.getJumlahBuku(),
+            perpustakaan.getJumlahAnggota(),
+            hitungTotalBukuDipinjam(),
+            perpustakaan.getJumlahBuku(),
+            Perpustakaan.MAX_BUKU);
+        System.out.println("╚════════════════════════════════════════════════════════════════════════════════╝");
+    }
+
+    private static int hitungTotalBukuDipinjam() {
+        int total = 0;
+        for (int i = 0; i < perpustakaan.getJumlahAnggota(); i++) {
+            total += perpustakaan.getDaftarAnggota()[i].getJumlahBukuDipinjam();
+        }
+        return total;
+    }
 }

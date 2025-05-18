@@ -8,11 +8,11 @@ public class Anggota {
     private String alamat;
     private String membership;
 
-    private Buku[] bukuArrayDipinjam;
-    private int jumlahBukuDipinjam;
+    protected Buku[] bukuArrayDipinjam;
+    protected int jumlahBukuDipinjam;
     private static final int MAX_PINJAM = 5;
 
-    private HashMap<Buku, LocalDate> dataPinjam = new HashMap<>();
+    protected HashMap<Buku, LocalDate> dataPinjam = new HashMap<>();
     private static final int BATAS_HARI_PINJAM = 7;
     private static final int DENDA_PER_HARI = 1000;
 
@@ -45,6 +45,18 @@ public class Anggota {
         return membership;
     }
 
+    public int getJumlahBukuDipinjam() {
+        return jumlahBukuDipinjam;
+    }
+
+    public Buku[] getBukuArrayDipinjam() {
+        return bukuArrayDipinjam;
+    }
+
+    public HashMap<Buku, LocalDate> getDataPinjam() {
+        return dataPinjam;
+    }
+
     public void setMembership(String membership) {
         this.membership = membership;
     }
@@ -59,9 +71,9 @@ public class Anggota {
         return false;
     }
 
-    public boolean kembalikanBuku(Buku buku, LocalDate tanggalKembali) {
+    public boolean kembalikanBuku(Buku buku, LocalDate tanggalKembali) { // Removed tanggalPinjam parameter
         if (dataPinjam.containsKey(buku)) {
-            LocalDate tanggalPinjam = dataPinjam.get(buku);
+            LocalDate tanggalPinjam = dataPinjam.get(buku); // Now this is the only declaration
             long selisihHari = ChronoUnit.DAYS.between(tanggalPinjam, tanggalKembali);
 
             if (selisihHari > BATAS_HARI_PINJAM) {

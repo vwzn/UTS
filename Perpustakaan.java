@@ -6,8 +6,25 @@ public class Perpustakaan {
     private Anggota[] daftarAnggota;
     private int jumlahBuku;
     private int jumlahAnggota;
-    private static final int MAX_BUKU = 100;
-    private static final int MAX_ANGGOTA = 50;
+    public static final int MAX_BUKU = 100;
+    public static final int MAX_ANGGOTA = 50;
+
+    // Add these getter methods
+    public int getJumlahBuku() {
+        return jumlahBuku;
+    }
+
+    public int getJumlahAnggota() {
+        return jumlahAnggota;
+    }
+
+    public Buku[] getDaftarBuku() {
+        return daftarBuku;
+    }
+
+    public Anggota[] getDaftarAnggota() {
+        return daftarAnggota;
+    }
 
     public Perpustakaan() {
         this.daftarBuku = new Buku[MAX_BUKU];
@@ -59,7 +76,7 @@ public class Perpustakaan {
         return null;
     }
 
-    public boolean pinjamBuku(String idAnggota, String kodeBuku) {
+    public boolean pinjamBuku(String idAnggota, String kodeBuku, LocalDate tanggalPinjam) {
         Anggota anggota = cariAnggotaById(idAnggota);
         Buku buku = cariBukuByKode(kodeBuku);
 
