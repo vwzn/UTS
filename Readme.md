@@ -142,11 +142,11 @@ sequenceDiagram
 
 ## 📜 License
 
-MIT License - Hak cipta © 2023 Tim PBO UTS
+MIT License - Hak cipta © 2025 Tim 3 PBO UTS
 
 ---
 
 <div align="center">
-  <h3>Dikembangkan dengan ❤️ oleh Tim PBO UTS</h3>
+  <h3>Dikembangkan dengan ❤️ oleh Tim 3 PBO UTS</h3>
   <p>"Membangun sistem untuk masa depan yang lebih terdidik"</p>
 </div>
